@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import weatherHome from '../images/weather-cool.jpg';
+import weatherCool from '../images/weather-cool.jpg';
 import weatherHot from '../images/weather-hot.jpg';
 import { FaSearch, FaThermometer } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
@@ -10,9 +10,11 @@ import { useState, useEffect } from 'react';
 const Section = styled.section`
   width: 100%;
   height: 100vh;
-  background: url(${weatherHome}) no-repeat;
+  background: ${(props) =>
+    props.source === true ? `url(${weatherCool})` : `url(${weatherHot})`};
   background-color: rgba(45, 5, 45, 0.5);
   background-size: cover;
+  background-repeat: no-repeat;
 
   &:before {
     content: '';
@@ -104,18 +106,21 @@ const HomeWrapper = () => {
   const getInput = (e) => {
     e.preventDefault();
     setInput(city);
-    const clearInput = () => {
-      setCity('');
-    };
-    clearInput();
+    setCity('');
   };
-  const toggleSource = (e) => {
-    setSource(true);
+  const toggleSource = () => {
+    if (!source) {
+      setSource(true);
+    } else {
+      setSource(false);
+    }
+
+    console.log(source);
   };
 
   return (
     <IconContext.Provider value={{ color: '#ef8171', size: 40 }}>
-      <Section>
+      <Section source={source}>
         <form onSubmit={getInput}>
           <Input onChange={updateCity} value={city} />
         </form>
@@ -125,10 +130,15 @@ const HomeWrapper = () => {
         <button
           onClick={toggleSource}
           style={{
-            height: 150,
+            height: 40,
             width: 150,
             border: 'none',
+            marginLeft: 120,
+            marginTop: 120,
+            borderRadius: 4,
+            color: 'white',
             backgroundColor: 'Navy',
+            position: 'absolute',
           }}
         >
           {' '}
